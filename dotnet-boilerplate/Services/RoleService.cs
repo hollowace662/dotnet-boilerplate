@@ -1,21 +1,17 @@
-using dotnet_boilerplate.Data;
 using dotnet_boilerplate.DTO;
 using dotnet_boilerplate.Models;
+using dotnet_boilerplate.Repositories;
 
 namespace dotnet_boilerplate.Services
 {
-    public class RoleService(AppDbContext context) : IRoleService
+    public class RoleService(IRoleRepository repository) : IRoleService
     {
-        private readonly AppDbContext _context = context;
+        private readonly IRoleRepository _repository = repository;
 
         //Create
         public async Task<Role> CreateRoleAsync(CreateRoleDTO createRoleDTO)
         {
-            var createdRole = await _context.Roles.AddAsync(
-                new Role { Name = createRoleDTO.Name, Description = createRoleDTO.Description }
-            );
-            await _context.SaveChangesAsync();
-            return createdRole.Entity;
+            return await _repository.CreateRoleAsync(createRoleDTO);
         }
 
         //Read

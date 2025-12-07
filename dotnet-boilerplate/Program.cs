@@ -1,4 +1,5 @@
 using dotnet_boilerplate.Data;
+using dotnet_boilerplate.Repositories;
 using dotnet_boilerplate.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,11 +14,11 @@ builder.Services.AddControllers();
 //Add database context
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=app.db"));
 
+//Dependency injection for repositories
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
 //Dependency injection for services
 builder.Services.AddScoped<IRoleService, RoleService>();
-
-//Dependency injection for repositories
-// builder.Services.AddScoped<>();
 
 var app = builder.Build();
 
