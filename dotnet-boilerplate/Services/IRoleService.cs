@@ -9,13 +9,13 @@ namespace dotnet_boilerplate.Services
         public Task<Role> CreateRoleAsync(CreateRoleDTO createRoleDTO);
 
         //Read
-        public Task<Role?> GetRoleByIdAsync(GetRoleDTO getRoleDTO);
+        public Task<Role?> GetRoleByIdAsync(int id);
         public Task<IEnumerable<Role>> GetAllRolesAsync();
 
         //Update
-        public Task<Role?> UpdateRoleAsync(UpdateRoleDTO updateRoleDTO);
+        public Task<Role?> UpdateRoleAsync(int id, UpdateRoleDTO updateRoleDTO);
 
         //Delete
-        public Task<bool> DeleteRoleAsync(DeleteRoleDTO deleteRoleDTO);
+        public Task<bool> DeleteRoleAsync(int id);
     }
 }

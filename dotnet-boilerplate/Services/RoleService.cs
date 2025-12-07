@@ -15,26 +15,26 @@ namespace dotnet_boilerplate.Services
         }
 
         //Read
-        public Task<Role?> GetRoleByIdAsync(GetRoleDTO getRoleDTO)
+        public async Task<Role?> GetRoleByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetRoleByIdAsync(id);
         }
 
         public Task<IEnumerable<Role>> GetAllRolesAsync()
         {
-            throw new NotImplementedException();
+            return _repository.GetAllRolesAsync();
         }
 
         //Update
-        public Task<Role?> UpdateRoleAsync(UpdateRoleDTO updateRoleDTO)
+        public Task<Role?> UpdateRoleAsync(int id, UpdateRoleDTO updateRoleDTO)
         {
-            throw new NotImplementedException();
+            return _repository.UpdateRoleAsync(id, updateRoleDTO);
         }
 
         //Delete
-        public Task<bool> DeleteRoleAsync(DeleteRoleDTO deleteRoleDTO)
+        public Task<bool> DeleteRoleAsync(int id)
         {
-            throw new NotImplementedException();
+            return _repository.DeleteRoleAsync(id);
         }
     }
 }

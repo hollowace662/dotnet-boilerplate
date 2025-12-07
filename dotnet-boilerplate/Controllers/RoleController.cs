@@ -20,29 +20,45 @@ namespace dotnet_boilerplate.Controllers
 
         //Read
         [HttpGet("{id}")]
-        public IActionResult GetRole(GetRoleDTO getRoleDTO)
+        public async Task<IActionResult> GetRole(int id)
         {
-            return Ok();
+            var role = await _roleService.GetRoleByIdAsync(id);
+            if (role == null)
+            {
+                return NotFound();
+            }
+            return Ok(role);
         }
 
         [HttpGet]
-        public IActionResult GetAllRoles()
+        public async Task<IActionResult> GetAllRoles()
         {
-            return Ok(new { response = "In GetAllRoles" });
+            var roles = await _roleService.GetAllRolesAsync();
+            return Ok(roles);
         }
 
         //Update
         [HttpPut("{id}")]
-        public IActionResult UpdateRole(UpdateRoleDTO updateRoleDTO)
+        public async Task<IActionResult> UpdateRole(int id, [FromBody] UpdateRoleDTO updateRoleDTO)
         {
-            return Ok();
+            var updatedRole = await _roleService.UpdateRoleAsync(id, updateRoleDTO);
+            if (updatedRole == null)
+            {
+                return NotFound();
+            }
+            return Ok(updatedRole);
         }
 
         //Delete
         [HttpDelete("{id}")]
-        public IActionResult DeleteRole(DeleteRoleDTO deleteRoleDTO)
+        public async Task<IActionResult> DeleteRole(int id)
         {
-            return Ok();
+            var deleted = await _roleService.DeleteRoleAsync(id);
+            if (!deleted)
+            {
+                return NotFound();
+            }
+            return Ok(new { message = "Deleted successfully" });
         }
     }
 }
