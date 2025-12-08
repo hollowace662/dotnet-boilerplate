@@ -20,6 +20,8 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 //Dependency injection for services
 builder.Services.AddScoped<IRoleService, RoleService>();
 
+builder.Services.AddScoped<IUserService, UserService>();
+
 var app = builder.Build();
 
 //If https is enabled, redirect http requests to https
