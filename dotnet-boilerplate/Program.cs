@@ -16,10 +16,10 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data S
 
 //Dependency injection for repositories
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //Dependency injection for services
 builder.Services.AddScoped<IRoleService, RoleService>();
-
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();

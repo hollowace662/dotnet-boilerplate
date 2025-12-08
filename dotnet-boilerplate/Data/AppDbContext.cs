@@ -13,12 +13,18 @@ namespace dotnet_boilerplate.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("User");
+                entity.HasKey(ur => new { ur.Id });
+                entity.HasIndex(u => u.Username).IsUnique();
+                entity.HasIndex(u => u.Email).IsUnique();
+            });
+
             modelBuilder.Entity<UsersRoles>(entity =>
             {
                 entity.ToTable("UsersRoles");
-
                 entity.HasKey(ur => new { ur.UserId, ur.RoleId });
-
                 entity
                     .HasOne<User>()
                     .WithMany()

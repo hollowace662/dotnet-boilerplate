@@ -10,7 +10,6 @@ namespace dotnet_boilerplate.Controllers
     {
         private readonly IRoleService _roleService = roleService;
 
-        //Create
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleDTO createRoleDTO)
         {
@@ -18,7 +17,6 @@ namespace dotnet_boilerplate.Controllers
             return CreatedAtAction(nameof(CreateRole), new { id = createdRole.Id }, createdRole);
         }
 
-        //Read
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRole(int id)
         {
@@ -37,7 +35,6 @@ namespace dotnet_boilerplate.Controllers
             return Ok(roles);
         }
 
-        //Update
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRole(int id, [FromBody] UpdateRoleDTO updateRoleDTO)
         {
@@ -49,7 +46,6 @@ namespace dotnet_boilerplate.Controllers
             return Ok(updatedRole);
         }
 
-        //Delete
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRole(int id)
         {

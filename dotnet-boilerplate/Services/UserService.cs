@@ -1,16 +1,16 @@
-using dotnet_boilerplate.Data;
 using dotnet_boilerplate.DTO;
 using dotnet_boilerplate.Models;
+using dotnet_boilerplate.Repositories;
 
 namespace dotnet_boilerplate.Services
 {
     public class UserService : IUserService
     {
-        private readonly AppDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(AppDbContext context)
+        public UserService(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         public async Task<User> CreateUserAsync(CreateUserDTO createUserDTO)
@@ -28,25 +28,17 @@ namespace dotnet_boilerplate.Services
                 throw new ArgumentException("At least one role must be assigned to the user.");
             }
 
-            using var tx = await _context.Database.BeginTransactionAsync();
-
-            var user = new User { Username = createUserDTO.Username, Email = createUserDTO.Email };
-            _context.Users.Add(user);
-
-            await _context.SaveChangesAsync();
-            foreach (var roleId in createUserDTO.RoleIds)
+            if (await _userRepository.UsernameExistsAsync(createUserDTO.Username))
             {
-                var role = await _context.Roles.FindAsync(roleId);
-                if (role == null)
-                {
-                    await tx.RollbackAsync();
-                    throw new ArgumentException($"Role with ID {roleId} does not exist.");
-                }
-
-                _context.UserRoles.Add(new UsersRoles { UserId = user.Id, RoleId = roleId });
+                throw new ArgumentException("Username already exists.");
             }
-            await _context.SaveChangesAsync();
-            await tx.CommitAsync();
+
+            if (await _userRepository.EmailExistsAsync(createUserDTO.Email))
+            {
+                throw new ArgumentException("Email already exists.");
+            }
+
+            var user = await _userRepository.CreateUserAsync(createUserDTO);
             return user;
         }
     }

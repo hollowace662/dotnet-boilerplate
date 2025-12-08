@@ -10,12 +10,22 @@ namespace dotnet_boilerplate.Controllers
     {
         private readonly IUserService _userService = userService;
 
-        //Create
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDTO createUserDTO)
         {
-            var createdUser = await _userService.CreateUserAsync(createUserDTO);
-            return CreatedAtAction(nameof(CreateUser), new { id = createdUser.Id }, createdUser);
+            try
+            {
+                var createdUser = await _userService.CreateUserAsync(createUserDTO);
+                return CreatedAtAction(
+                    nameof(CreateUser),
+                    new { id = createdUser.Id },
+                    createdUser
+                );
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }
