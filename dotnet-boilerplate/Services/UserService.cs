@@ -4,23 +4,28 @@ using dotnet_boilerplate.Repositories;
 
 namespace dotnet_boilerplate.Services
 {
-    public class UserService : IUserService
+    public class UserService(IUserRepository userRepository) : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository = userRepository;
 
-        public UserService(IUserRepository userRepository)
+        public async Task<List<User>?> GetAllUsersAsync()
         {
-            _userRepository = userRepository;
+            return await _userRepository.GetAllUsersAsync();
         }
 
-        public async Task<User> CreateUserAsync(CreateUserDTO createUserDTO)
+        public async Task<GetUserResponseDTO?> GetUserByIdAsync(int id)
+        {
+            return await _userRepository.GetUserByIdAsync(id);
+        }
+
+        public async Task<User> CreateUserAsync(CreateUserRequestDTO createUserDTO)
         {
             if (
                 string.IsNullOrWhiteSpace(createUserDTO.Username)
                 || string.IsNullOrWhiteSpace(createUserDTO.Email)
             )
             {
-                throw new ArgumentException("Username and Email cannot be empty.");
+                throw new ArgumentException("Username or Email cannot be empty.");
             }
 
             if (createUserDTO.RoleIds == null || createUserDTO.RoleIds.Count == 0)
@@ -40,6 +45,37 @@ namespace dotnet_boilerplate.Services
 
             var user = await _userRepository.CreateUserAsync(createUserDTO);
             return user;
+        }
+
+        public async Task<UpdateUserResponseDTO?> UpdateUserAsync(
+            int id,
+            UpdateUserRequestDTO updateUserDTO
+        )
+        {
+            if (updateUserDTO.RoleIds != null && updateUserDTO.RoleIds.Count == 0)
+            {
+                throw new ArgumentException("At least one role must be assigned to the user.");
+            }
+            if (
+                updateUserDTO.Username != null
+                && await _userRepository.UsernameExistsAsync(updateUserDTO.Username!)
+            )
+            {
+                throw new ArgumentException("Username already exists.");
+            }
+            if (
+                updateUserDTO.Email != null
+                && await _userRepository.EmailExistsAsync(updateUserDTO.Email!)
+            )
+            {
+                throw new ArgumentException("Email already exists.");
+            }
+            return await _userRepository.UpdateUserAsync(id, updateUserDTO);
+        }
+
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            return await _userRepository.DeleteUserAsync(id);
         }
     }
 }

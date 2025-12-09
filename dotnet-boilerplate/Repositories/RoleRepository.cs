@@ -9,8 +9,17 @@ namespace dotnet_boilerplate.Repositories
     {
         private readonly AppDbContext _context = context;
 
-        //Create
-        public async Task<Role> CreateRoleAsync(CreateRoleDTO createRoleDTO)
+        public async Task<IEnumerable<Role>> GetAllRolesAsync()
+        {
+            return await _context.Roles.ToListAsync();
+        }
+
+        public async Task<Role?> GetRoleByIdAsync(int id)
+        {
+            return await _context.Roles.FindAsync(id);
+        }
+
+        public async Task<Role> CreateRoleAsync(CreateRoleRequestDTO createRoleDTO)
         {
             var createdRole = await _context.Roles.AddAsync(
                 new Role { Name = createRoleDTO.Name, Description = createRoleDTO.Description }
@@ -19,18 +28,7 @@ namespace dotnet_boilerplate.Repositories
             return createdRole.Entity;
         }
 
-        //Read
-        public async Task<Role?> GetRoleByIdAsync(int id)
-        {
-            return await _context.Roles.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Role>> GetAllRolesAsync()
-        {
-            return await _context.Roles.ToListAsync();
-        }
-
-        public async Task<Role?> UpdateRoleAsync(int id, UpdateRoleDTO updateRoleDTO)
+        public async Task<Role?> UpdateRoleAsync(int id, UpdateRoleRequestDTO updateRoleDTO)
         {
             var role = await _context.Roles.FindAsync(id);
             if (role == null)

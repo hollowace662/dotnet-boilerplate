@@ -10,11 +10,11 @@ namespace dotnet_boilerplate.Controllers
     {
         private readonly IRoleService _roleService = roleService;
 
-        [HttpPost]
-        public async Task<IActionResult> CreateRole(CreateRoleDTO createRoleDTO)
+        [HttpGet]
+        public async Task<IActionResult> GetAllRoles()
         {
-            var createdRole = await _roleService.CreateRoleAsync(createRoleDTO);
-            return CreatedAtAction(nameof(CreateRole), new { id = createdRole.Id }, createdRole);
+            var roles = await _roleService.GetAllRolesAsync();
+            return Ok(roles);
         }
 
         [HttpGet("{id}")]
@@ -28,15 +28,18 @@ namespace dotnet_boilerplate.Controllers
             return Ok(role);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllRoles()
+        [HttpPost]
+        public async Task<IActionResult> CreateRole(CreateRoleRequestDTO createRoleDTO)
         {
-            var roles = await _roleService.GetAllRolesAsync();
-            return Ok(roles);
+            var createdRole = await _roleService.CreateRoleAsync(createRoleDTO);
+            return CreatedAtAction(nameof(CreateRole), new { id = createdRole.Id }, createdRole);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRole(int id, [FromBody] UpdateRoleDTO updateRoleDTO)
+        public async Task<IActionResult> UpdateRole(
+            int id,
+            [FromBody] UpdateRoleRequestDTO updateRoleDTO
+        )
         {
             var updatedRole = await _roleService.UpdateRoleAsync(id, updateRoleDTO);
             if (updatedRole == null)

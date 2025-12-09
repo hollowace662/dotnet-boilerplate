@@ -5,10 +5,10 @@ namespace dotnet_boilerplate.Repositories
 {
     public interface IRoleRepository
     {
-        Task<Role> CreateRoleAsync(CreateRoleDTO createRoleDTO);
-        Task<Role?> GetRoleByIdAsync(int id);
         Task<IEnumerable<Role>> GetAllRolesAsync();
-        Task<Role?> UpdateRoleAsync(int id, UpdateRoleDTO updateRoleDTO);
+        Task<Role?> GetRoleByIdAsync(int id);
+        Task<Role> CreateRoleAsync(CreateRoleRequestDTO createRoleDTO);
+        Task<Role?> UpdateRoleAsync(int id, UpdateRoleRequestDTO updateRoleDTO);
         Task<bool> DeleteRoleAsync(int id);
     }
 }
