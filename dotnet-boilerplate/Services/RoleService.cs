@@ -8,29 +8,82 @@ namespace dotnet_boilerplate.Services
     {
         private readonly IRoleRepository _repository = repository;
 
-        public Task<IEnumerable<Role>> GetAllRolesAsync()
+        public async Task<List<RoleDTO>> GetAllRolesAsync()
         {
-            return _repository.GetAllRolesAsync();
+            var roles = await _repository.GetAllRolesAsync();
+            return
+            [
+                .. roles.Select(role => new RoleDTO
+                {
+                    RoleId = role.Id,
+                    Name = role.Name,
+                    Description = role.Description,
+                }),
+            ];
         }
 
-        public async Task<Role?> GetRoleByIdAsync(int id)
+        public async Task<RoleDTO?> GetRoleByIdAsync(int id)
         {
-            return await _repository.GetRoleByIdAsync(id);
+            var role = await _repository.GetRoleByIdAsync(id);
+            if (role == null)
+            {
+                return null;
+            }
+            return new RoleDTO
+            {
+                RoleId = role.Id,
+                Name = role.Name,
+                Description = role.Description,
+            };
         }
 
-        public async Task<Role> CreateRoleAsync(CreateRoleRequestDTO createRoleDTO)
+        public async Task<RoleDTO> CreateRoleAsync(CreateRoleRequestDTO createRoleDTO)
         {
-            return await _repository.CreateRoleAsync(createRoleDTO);
+            var role = new Role
+            {
+                Name = createRoleDTO.Name!,
+                Description = createRoleDTO.Description!,
+            };
+            var createdRole = await _repository.CreateRoleAsync(role);
+            return new RoleDTO
+            {
+                RoleId = createdRole.Id,
+                Name = createdRole.Name,
+                Description = createdRole.Description,
+            };
         }
 
-        public Task<Role?> UpdateRoleAsync(int id, UpdateRoleRequestDTO updateRoleDTO)
+        public async Task<RoleDTO?> UpdateRoleAsync(int id, UpdateRoleRequestDTO updateRoleDTO)
         {
-            return _repository.UpdateRoleAsync(id, updateRoleDTO);
+            var role = await _repository.GetRoleByIdAsync(id);
+            if (role == null)
+            {
+                return null;
+            }
+            if (updateRoleDTO.Name != null)
+            {
+                role.Name = updateRoleDTO.Name;
+            }
+            if (updateRoleDTO.Description != null)
+            {
+                role.Description = updateRoleDTO.Description;
+            }
+            var updatedRole = await _repository.UpdateRoleAsync(role);
+            if (updatedRole == null)
+            {
+                return null;
+            }
+            return new RoleDTO
+            {
+                RoleId = updatedRole.Id,
+                Name = updatedRole.Name,
+                Description = updatedRole.Description,
+            };
         }
 
-        public Task<bool> DeleteRoleAsync(int id)
+        public async Task<bool> DeleteRoleAsync(int id)
         {
-            return _repository.DeleteRoleAsync(id);
+            return await _repository.DeleteRoleAsync(id);
         }
     }
 }

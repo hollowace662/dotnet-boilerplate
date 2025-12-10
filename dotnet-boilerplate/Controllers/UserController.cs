@@ -18,7 +18,7 @@ namespace dotnet_boilerplate.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id)
+        public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
             try
             {
@@ -36,14 +36,14 @@ namespace dotnet_boilerplate.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserRequestDTO createUserDTO)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDTO createUserDTO)
         {
             try
             {
                 var createdUser = await _userService.CreateUserAsync(createUserDTO);
                 return CreatedAtAction(
                     nameof(CreateUser),
-                    new { id = createdUser.Id },
+                    new { id = createdUser.User.UserId },
                     createdUser
                 );
             }
@@ -55,7 +55,7 @@ namespace dotnet_boilerplate.Controllers
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(
-            int id,
+            [FromRoute] int id,
             [FromBody] UpdateUserRequestDTO updateUserDTO
         )
         {
@@ -71,7 +71,7 @@ namespace dotnet_boilerplate.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {
             var result = await _userService.DeleteUserAsync(id);
             if (!result)

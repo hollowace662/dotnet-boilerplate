@@ -18,7 +18,7 @@ namespace dotnet_boilerplate.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRole(int id)
+        public async Task<IActionResult> GetRole([FromRoute] int id)
         {
             var role = await _roleService.GetRoleByIdAsync(id);
             if (role == null)
@@ -29,15 +29,19 @@ namespace dotnet_boilerplate.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRole(CreateRoleRequestDTO createRoleDTO)
+        public async Task<IActionResult> CreateRole([FromBody] CreateRoleRequestDTO createRoleDTO)
         {
             var createdRole = await _roleService.CreateRoleAsync(createRoleDTO);
-            return CreatedAtAction(nameof(CreateRole), new { id = createdRole.Id }, createdRole);
+            return CreatedAtAction(
+                nameof(CreateRole),
+                new { id = createdRole.RoleId },
+                createdRole
+            );
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRole(
-            int id,
+            [FromRoute] int id,
             [FromBody] UpdateRoleRequestDTO updateRoleDTO
         )
         {
@@ -50,7 +54,7 @@ namespace dotnet_boilerplate.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRole(int id)
+        public async Task<IActionResult> DeleteRole([FromRoute] int id)
         {
             var deleted = await _roleService.DeleteRoleAsync(id);
             if (!deleted)

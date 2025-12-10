@@ -1,5 +1,4 @@
 using dotnet_boilerplate.Data;
-using dotnet_boilerplate.DTO;
 using dotnet_boilerplate.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,40 +8,31 @@ namespace dotnet_boilerplate.Repositories
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<IEnumerable<Role>> GetAllRolesAsync()
+        public async Task<List<Role>> GetAllRolesAsync()
         {
-            return await _context.Roles.ToListAsync();
+            var roles = await _context.Roles.ToListAsync();
+            return roles;
         }
 
         public async Task<Role?> GetRoleByIdAsync(int id)
-        {
-            return await _context.Roles.FindAsync(id);
-        }
-
-        public async Task<Role> CreateRoleAsync(CreateRoleRequestDTO createRoleDTO)
-        {
-            var createdRole = await _context.Roles.AddAsync(
-                new Role { Name = createRoleDTO.Name, Description = createRoleDTO.Description }
-            );
-            await _context.SaveChangesAsync();
-            return createdRole.Entity;
-        }
-
-        public async Task<Role?> UpdateRoleAsync(int id, UpdateRoleRequestDTO updateRoleDTO)
         {
             var role = await _context.Roles.FindAsync(id);
             if (role == null)
             {
                 return null;
             }
-            if (updateRoleDTO.Name != null)
-            {
-                role.Name = updateRoleDTO.Name;
-            }
-            if (updateRoleDTO.Description != null)
-            {
-                role.Description = updateRoleDTO.Description;
-            }
+            return role;
+        }
+
+        public async Task<Role> CreateRoleAsync(Role role)
+        {
+            var createdRole = await _context.Roles.AddAsync(role);
+            await _context.SaveChangesAsync();
+            return createdRole.Entity;
+        }
+
+        public async Task<Role> UpdateRoleAsync(Role role)
+        {
             _context.Roles.Update(role);
             await _context.SaveChangesAsync();
             return role;

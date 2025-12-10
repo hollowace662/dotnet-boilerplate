@@ -7,7 +7,7 @@ namespace dotnet_boilerplate.Data
     {
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UsersRoles> UserRoles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace dotnet_boilerplate.Data
                 entity.HasIndex(u => u.Email).IsUnique();
             });
 
-            modelBuilder.Entity<UsersRoles>(entity =>
+            modelBuilder.Entity<UserRole>(entity =>
             {
                 entity.ToTable("UsersRoles");
                 entity.HasKey(ur => new { ur.UserId, ur.RoleId });

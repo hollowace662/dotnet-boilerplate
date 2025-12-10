@@ -5,10 +5,10 @@ namespace dotnet_boilerplate.Services
 {
     public interface IRoleService
     {
-        public Task<IEnumerable<Role>> GetAllRolesAsync();
-        public Task<Role?> GetRoleByIdAsync(int id);
-        public Task<Role> CreateRoleAsync(CreateRoleRequestDTO createRoleDTO);
-        public Task<Role?> UpdateRoleAsync(int id, UpdateRoleRequestDTO updateRoleDTO);
+        public Task<List<RoleDTO>> GetAllRolesAsync();
+        public Task<RoleDTO?> GetRoleByIdAsync(int id);
+        public Task<RoleDTO> CreateRoleAsync(CreateRoleRequestDTO createRoleDTO);
+        public Task<RoleDTO?> UpdateRoleAsync(int id, UpdateRoleRequestDTO updateRoleDTO);
         public Task<bool> DeleteRoleAsync(int id);
     }
 }

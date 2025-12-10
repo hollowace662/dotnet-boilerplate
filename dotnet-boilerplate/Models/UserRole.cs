@@ -1,6 +1,6 @@
 namespace dotnet_boilerplate.Models
 {
-    public class UsersRoles
+    public class UserRole
     {
         public int UserId { get; set; }
         public int RoleId { get; set; }

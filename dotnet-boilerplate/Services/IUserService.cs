@@ -5,10 +5,10 @@ namespace dotnet_boilerplate.Services
 {
     public interface IUserService
     {
-        Task<List<User>?> GetAllUsersAsync();
-        Task<GetUserResponseDTO?> GetUserByIdAsync(int id);
-        Task<User> CreateUserAsync(CreateUserRequestDTO createUserDTO);
-        Task<UpdateUserResponseDTO?> UpdateUserAsync(int id, UpdateUserRequestDTO updateUserDTO);
+        Task<List<UserDTO>?> GetAllUsersAsync();
+        Task<UserWithRolesDTO?> GetUserByIdAsync(int id);
+        Task<UserWithRolesDTO> CreateUserAsync(CreateUserRequestDTO createUserDTO);
+        Task<UserWithRolesDTO> UpdateUserAsync(int id, UpdateUserRequestDTO updateUserDTO);
         Task<bool> DeleteUserAsync(int id);
     }
 }
