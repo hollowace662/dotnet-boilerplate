@@ -1,0 +1,15 @@
+services:
+  api:
+    container_name: dotnet-boilerplate-api
+    build:
+      context: .
+      dockerfile: dotnet-boilerplate/Dockerfile
+    restart: unless-stopped
+    expose:
+      - "8080"
+    networks:
+      - garantisa-dev-net
+
+networks:
+  garantisa-dev-net:
+    external: true

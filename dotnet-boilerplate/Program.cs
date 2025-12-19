@@ -4,6 +4,7 @@ using dotnet_boilerplate.Services;
 using dotnet_boilerplate.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +52,16 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
         return new BadRequestObjectResult(result);
     };
 });
+
+//JWT bearer authentication configuration
+builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://keycloak/auth/realms/mi-realm";
+        options.Audience = "mi-api";
+        options.RequireHttpsMetadata = true;
+    });
 
 var app = builder.Build();
 
