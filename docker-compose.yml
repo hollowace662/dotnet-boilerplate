@@ -1,14 +1,18 @@
 services:
   api:
-    container_name: dotnet-boilerplate-api
+    container_name: garantisa-api
     build:
       context: .
-      dockerfile: dotnet-boilerplate/Dockerfile
+      dockerfile: garantisa-api/Dockerfile
     restart: unless-stopped
     expose:
       - "8080"
     networks:
       - garantisa-dev-net
+    volumes:
+      - ./garantisa-api/app.db:/src/app.db
+    extra_hosts:
+      - "auth.garantisa.dev:172.18.0.6"
 
 networks:
   garantisa-dev-net:
