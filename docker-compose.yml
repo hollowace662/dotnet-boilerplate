@@ -11,8 +11,6 @@ services:
       - garantisa-dev-net
     volumes:
       - ./garantisa-api/app.db:/src/app.db
-    extra_hosts:
-      - "auth.garantisa.dev:172.18.0.6"
 
 networks:
   garantisa-dev-net:

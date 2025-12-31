@@ -63,9 +63,7 @@ builder
     .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://auth.garantisa.dev/realms/dev";
-        options.MetadataAddress =
-            "https://auth.garantisa.dev/realms/dev/.well-known/openid-configuration";
+        options.Authority = builder.Configuration.GetValue<String>("Jwt:Authority");
         options.BackchannelHttpHandler = new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback =
@@ -73,21 +71,16 @@ builder
         };
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidIssuer = "https://auth.garantisa.dev/realms/dev",
             ValidateAudience = true,
-            ValidAudience = "internal-api",
+            ValidAudiences = builder.Configuration.GetSection("Jwt:Audiences").Get<string[]>(),
         };
-
-        // options.TokenValidationParameters.ValidAudiences = builder
-        //     .Configuration.GetSection("Jwt:Audiences")
-        //     .Get<string[]>();
     });
 
 var serviceName = "garantisa-api";
 
 builder
     .Services.AddOpenTelemetry()
+    .ConfigureResource(r => r.AddService(serviceName))
     .WithTracing(tracing =>
     {
         tracing
